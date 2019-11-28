@@ -98,7 +98,36 @@ $(function() {
       answer: 'noConflict()',
       link: 'https://api.jquery.com/jQuery.noConflict/'
     },
-
+    {
+      question: 'This method performs a deep copy of the set of matched elements.',
+      options: ['clone()', 'copy()', 'deepCopy()'],
+      answer: 'clone()',
+      link: 'https://api.jquery.com/clone/'
+    },
+    {
+      question: 'This method stores arbitrary data associated with the matched elements.',
+      options: ['key()', 'store()', 'data()'],
+      answer: 'data()',
+      link: 'https://api.jquery.com/data/'
+    },
+    {
+      question: 'This method adds the specified class(es) to each element in the set of matched elements.',
+      options: ['className()', 'addClass()', 'classListAdd()'],
+      answer: 'addClass()',
+      link: 'https://api.jquery.com/addClass/'
+    },
+    {
+      question: 'This method checks to see if any of the matched elements have the given class.',
+      options: ['checkClass()', 'hasClass()', 'class()'],
+      answer: 'hasClass()',
+      link: 'https://api.jquery.com/hasClass/'
+    },
+    {
+      question: 'This method displays the matched elements.',
+      options: ['display()', 'show()', 'enable()'],
+      answer: 'show()',
+      link: 'https://api.jquery.com/show/'
+    }
   ];
 
   // console.log(questionData);
