@@ -94,6 +94,16 @@ img {
 
 
 /* ************* main styles ************* */
+.scoreboard-container {
+  margin: 30px 0 0 auto;
+  text-align: right;
+}
+
+.scoreboard-container p,
+.score {
+  font-size: 2rem;
+}
+
 .question-bubble {
   border-radius: 5px;
   background-color: lightgrey;
@@ -110,15 +120,17 @@ img {
 
 .options-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .option {
-  background-color: lightcyan;
+  background-color: lightsteelblue;
   border-radius: 5px;
   width: 175px;
   text-align: center;
+  margin: 10px;
 }
 
 .option p {
@@ -126,6 +138,12 @@ img {
   font-size: 1.6rem;
 }
 
-.option:nth-child(-n+2) {
-  margin-bottom: 10px;
+
+
+
+
+/* ************* media queries ************* */
+
+@media (min-width: 600px) {
+
 }
