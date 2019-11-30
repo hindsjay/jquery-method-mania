@@ -131,46 +131,46 @@ $(function() {
     }
   ];
 
+  // cache jQuery variables
+  $score = $('.score');
+  $questionBubblePara = $('.question-bubble p');
+  $optionsContainer = $('.options-container');
+  $optionButton = $('.option');
 
-  // function to get random number from 0 to 20 (not including 20)
-  const getRandomNumber = () => {
-    return Math.floor(Math.random() * 20);
+
+  // function to get random number
+  const getRandomNumber = (num) => {
+    return Math.floor(Math.random() * num);
   };
 
 
   // function to initialize game
   const initializeGame = () => {
     // add score to screen at start
-    $('.score').html(counter);
-
+    $score.html(counter);
     // get random question from data structure and add it to the screen
-    updateQuestion(questionData);
+    addQuestionToScreen(questionData);
   };
 
 
   // function to dynamically add random question to DOM
-  const updateQuestion = (array) => {
+  const addQuestionToScreen = (array) => {
     // gets random number and put into variable to be used
-    const randomNumber = getRandomNumber();
-
+    const randomNumber = getRandomNumber(array.length);
     // function to get random question
     const getRandomQuestion = () => {
       return array[randomNumber].question;
     };
-
     //adds random question to DOM
-    $('.question-bubble p').html(getRandomQuestion());
-
+    $questionBubblePara.html(getRandomQuestion());
     // get corresponding answer options array --> this returns an array
     const getAnswerOptions = () => {
       return array[randomNumber].options;
     };
-
     // after get answerOptions array, append each item to the DOM
     getAnswerOptions().forEach( (option) => {
-      $('.options-container').append(`<p class="option">${option}</p>`);
+      $optionsContainer.append(`<button class="option">${option}</button>`);
     });
-
     // store correct answer
     questionCorrectAnswer = array[randomNumber].answer;
   }
@@ -180,21 +180,23 @@ $(function() {
 
 
   // when one of the options is chosen, it is the correct answer or an incorrect answer?
-  $('.option').on('click', (event) => {
-    const eventTargetHTML = $(event.target).html();
+  $('.option').on('click', function(event) {
+    const $eventTarget = $(event.target);
+    const $eventTargetHTML = $(event.target).html();
 
-    if (eventTargetHTML === questionCorrectAnswer) {
+    if ($eventTargetHTML === questionCorrectAnswer) {
       counter++;
-      $('.score').html(counter);
-
-      console.log('Yay! You got it right!');
+      $score.html(counter);
+      
+      addQuestionToScreen(questionData);
     } else {
       const livesIconsArray = Object.values($('.devicon-jquery-plain'));
       livesIconsArray[lives].style.visibility = 'hidden';
       lives--;
-
-      console.log('Sorry, that\'s not correct :(');
+      // blur out incorrect answer and prevent item from being clicked again
+      $eventTarget.css('filter', 'blur(1px)').attr("disabled", true);
     }
+    endGameCheck();
   });
 
   // if correct answer - a message should pop up saying they chose the correct answer and the score adds a point
@@ -207,7 +209,22 @@ $(function() {
 
   // function to check after each guess if the player won the game (i.e. pts = 10) or they lose the game (i.e. lives = 0)
 
+  const endGameCheck = () => {
+    if (counter === 10 || lives === 0) {
+      if (counter === 10) {
+        console.log('Sweet!  You won the game!  You know your jQuery methods well!');
+      } else if (lives === 0) {
+        console.log('Sorry!  You lost the game!  Check out the jQuery docs to study up on your methods!');
+      }
+      // resetGame();
+    }
+  };
 
+
+  // function to reset game after game was won or lost
+  const resetGame = () => {
+
+  };
 
 
 
