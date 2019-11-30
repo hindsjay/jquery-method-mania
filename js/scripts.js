@@ -1,9 +1,10 @@
-
-
-
 // document ready
 $(function() {
 
+  //variables
+  let counter = 0;
+  let lives = 2;
+  let questionCorrectAnswer;
 
   // question/answer data structure --> array of objects that hold question/answer data
   const questionData = [
@@ -34,7 +35,7 @@ $(function() {
     },
     {
       question: 'This method gets the first element that matches the selector.',
-      options: ['closestElement()', 'closest()', 'parents()'],
+      options: ['firstElement()', 'closest()', 'parents()'],
       answer: 'closest()',
       link: 'https://api.jquery.com/closest/'
     },
@@ -57,16 +58,16 @@ $(function() {
       link: 'https://api.jquery.com/one/'
     },
     {
-      question: 'This method returns whether event.preventDefault() was ever called on the event object.',
-      options: ['event.preventDefault()', 'event.isDefaultPrevented()', 'event.defaultPrevented()'],
-      answer: 'event.isDefaultPrevented()',
-      link: 'https://api.jquery.com/event.isDefaultPrevented/'
+      question: 'This method inserts content to the end of each element in the set of matched elements.',
+      options: ['append()', 'insert()', 'addContent()'],
+      answer: 'append()',
+      link: 'https://api.jquery.com/append/'
     },
     {
-      question: 'This method .',
-      options: ['event.stopDefault()', 'event.prevent()', 'event.preventDefault()'],
-      answer: 'event.preventDefault()',
-      link: 'https://api.jquery.com/event.preventDefault/'
+      question: 'This method gets the text contents of each element in the set of matched elements.',
+      options: ['contents()', 'textContent()', 'text()'],
+      answer: 'text()',
+      link: 'https://api.jquery.com/text/'
     },
     {
       question: 'This method removes all child nodes of matched elements from the DOM.',
@@ -94,7 +95,7 @@ $(function() {
     },
     {
       question: 'This method relinquishes jQuery\'s control of the "$" variable.',
-      options: ['conflict()', 'removeConflict()', 'noConflict()'],
+      options: ['conflict()', 'control()', 'noConflict()'],
       answer: 'noConflict()',
       link: 'https://api.jquery.com/jQuery.noConflict/'
     },
@@ -112,7 +113,7 @@ $(function() {
     },
     {
       question: 'This method adds the specified class(es) to each element in the set of matched elements.',
-      options: ['className()', 'addClass()', 'classListAdd()'],
+      options: ['className()', 'addClass()', 'classAdd()'],
       answer: 'addClass()',
       link: 'https://api.jquery.com/addClass/'
     },
@@ -130,7 +131,84 @@ $(function() {
     }
   ];
 
-  // console.log(questionData);
+
+  // function to get random number from 0 to 20 (not including 20)
+  const getRandomNumber = () => {
+    return Math.floor(Math.random() * 20);
+  };
+
+
+  // function to initialize game
+  const initializeGame = () => {
+    // add score to screen at start
+    $('.score').html(counter);
+
+    // get random question from data structure and add it to the screen
+    updateQuestion(questionData);
+  };
+
+
+  // function to dynamically add random question to DOM
+  const updateQuestion = (array) => {
+    // gets random number and put into variable to be used
+    const randomNumber = getRandomNumber();
+
+    // function to get random question
+    const getRandomQuestion = () => {
+      return array[randomNumber].question;
+    };
+
+    //adds random question to DOM
+    $('.question-bubble p').html(getRandomQuestion());
+
+    // get corresponding answer options array --> this returns an array
+    const getAnswerOptions = () => {
+      return array[randomNumber].options;
+    };
+
+    // after get answerOptions array, append each item to the DOM
+    getAnswerOptions().forEach( (option) => {
+      $('.options-container').append(`<p class="option">${option}</p>`);
+    });
+
+    // store correct answer
+    questionCorrectAnswer = array[randomNumber].answer;
+  }
+
+  // initialize game
+  initializeGame();
+
+
+  // when one of the options is chosen, it is the correct answer or an incorrect answer?
+  $('.option').on('click', (event) => {
+    const eventTargetHTML = $(event.target).html();
+
+    if (eventTargetHTML === questionCorrectAnswer) {
+      counter++;
+      $('.score').html(counter);
+
+      console.log('Yay! You got it right!');
+    } else {
+      const livesIconsArray = Object.values($('.devicon-jquery-plain'));
+      livesIconsArray[lives].style.visibility = 'hidden';
+      lives--;
+
+      console.log('Sorry, that\'s not correct :(');
+    }
+  });
+
+  // if correct answer - a message should pop up saying they chose the correct answer and the score adds a point
+
+  // if incorrect answer - a message should pop up saying they chose an incorrect answer
+    // on incorrect answer the following should happen:
+    // 1. life is removed
+    // 2. the option they chose is blanked out
+
+
+  // function to check after each guess if the player won the game (i.e. pts = 10) or they lose the game (i.e. lives = 0)
+
+
+
 
 
 }); // end of document ready
