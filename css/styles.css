@@ -87,7 +87,7 @@ img {
 }
 
 .header-container h2 {
-  font-family: 'Source Code Pro', monospace;
+  /* font-family: 'Source Code Pro', monospace; */
   /* font-family: 'Roboto Mono', monospace; */
   /* text-transform: uppercase; */
   font-size: 1.8rem;
@@ -138,6 +138,7 @@ img {
 }
 
 .option {
+  font-family: 'Source Code Pro', monospace;
   background-color: lightsteelblue;
   border-radius: 5px;
   width: 175px;
@@ -146,6 +147,7 @@ img {
   padding: 30px;
   font-size: 1.6rem;
   cursor: pointer;
+  border: none;
 }
 
 
