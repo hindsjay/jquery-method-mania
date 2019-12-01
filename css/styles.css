@@ -148,7 +148,41 @@ img {
   font-size: 1.6rem;
   cursor: pointer;
   border: none;
+  position: relative;
 }
+
+.hover-style {
+  transition: opacity .3s ease-in-out;
+}
+
+.hover-style:hover,
+.hover-style:focus {
+  opacity: .7;
+}
+
+
+/* ************* styles for options overlay ************* */
+.options-overlay {
+  height: 100%;
+  text-align: center;
+  position: absolute;
+  padding: 20px 10px 0;
+  top: 0;
+  left: 0;
+  display: none;
+  border-radius: 5px;
+  background-color: rgb(115, 170, 115);
+}
+
+.overlay-correct {
+  background-color: rgb(115, 170, 115);
+
+}
+
+.overlay-wrong {
+  background-color: rgb(173, 65, 65);;
+}
+
 
 
 /* ************* media queries ************* */
