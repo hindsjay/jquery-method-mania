@@ -133,9 +133,8 @@ $(function() {
 
   // cache jQuery variables
   $score = $('.score');
-  $questionBubblePara = $('.question-bubble p');
+  $questionBubble = $('.question-bubble');
   $optionsContainer = $('.options-container');
-  // $optionButton = $('.option');
 
 
   // function to get random number
@@ -160,6 +159,10 @@ $(function() {
     if ($optionsContainer[0].childElementCount > 0) {
       $('.option').remove();
     }
+    // similar to above if question bubble container has child element then remove it
+    if ($questionBubble[0].childElementCount > 0) {
+      $questionBubble[0].children[0].remove();
+    }
     // gets random number and put into variable to be used
     const randomNumber = getRandomNumber(array.length);
     // function to get random question from data structure
@@ -167,17 +170,22 @@ $(function() {
       return array[randomNumber].question;
     };
     //adds random question to DOM
-    $questionBubblePara.html(getRandomQuestion());
+    $questionBubble.append(`<p>${getRandomQuestion()}</p>`);
     // get corresponding answer options array from data structure --> returns an array
     const getAnswerOptions = () => {
       return array[randomNumber].options;
     };
-    // after get answerOptions array, append each item to the DOM
-    getAnswerOptions().forEach( (option) => {
-      $optionsContainer.append(`<button class="option">${option}</button>`);
-    });
     // store correct answer
     questionCorrectAnswer = array[randomNumber].answer;
+    // get answerOptions array, append each item to the DOM
+    getAnswerOptions().forEach( (option) => {
+      if (option === questionCorrectAnswer) {
+        $optionsContainer.append(`<button class="option hover-style">${option}<span class="options-overlay overlay-correct">Awesome! That's right!</span></button>`);
+      } else {
+        $optionsContainer.append(`<button class="option hover-style">${option}<span class="options-overlay overlay-wrong">Oh no! That's not right!</span></button>`);
+      }
+      // $optionsContainer.append(`<button class="option hover-style">${option}</button>`);
+    });
   }
 
   // initialize game
@@ -194,13 +202,18 @@ $(function() {
       counter++;
       $score.html(counter);
 
+      // at correct answer show correct answer button overlay
+
       addQuestionToScreen(questionData);
     } else {
       const livesIconsArray = Object.values($('.devicon-jquery-plain'));
       livesIconsArray[lives].style.visibility = 'hidden';
       lives--;
-      // blur out incorrect answer and prevent item from being clicked again
-      $eventTarget.css('filter', 'blur(1px)').attr("disabled", true);
+
+      // at incorrect answer show wrong answer button overlay
+
+      // blur out incorrect answer, prevent item from being clicked again, and remove hover effect
+      $eventTarget.css('filter', 'blur(1px)').attr("disabled", true).removeClass('hover-style');
     }
     endGameCheck();
   });
