@@ -135,7 +135,7 @@ $(function() {
   $score = $('.score');
   $questionBubblePara = $('.question-bubble p');
   $optionsContainer = $('.options-container');
-  $optionButton = $('.option');
+  // $optionButton = $('.option');
 
 
   // function to get random number
@@ -155,15 +155,20 @@ $(function() {
 
   // function to dynamically add random question to DOM
   const addQuestionToScreen = (array) => {
+    // if options container has child elements then remove them
+    // if no child elements then we are at very beginning of game and will not enter function
+    if ($optionsContainer[0].childElementCount > 0) {
+      $('.option').remove();
+    }
     // gets random number and put into variable to be used
     const randomNumber = getRandomNumber(array.length);
-    // function to get random question
+    // function to get random question from data structure
     const getRandomQuestion = () => {
       return array[randomNumber].question;
     };
     //adds random question to DOM
     $questionBubblePara.html(getRandomQuestion());
-    // get corresponding answer options array --> this returns an array
+    // get corresponding answer options array from data structure --> returns an array
     const getAnswerOptions = () => {
       return array[randomNumber].options;
     };
@@ -180,14 +185,15 @@ $(function() {
 
 
   // when one of the options is chosen, it is the correct answer or an incorrect answer?
-  $('.option').on('click', function(event) {
+  // using bubbling to add event listener to dynamically added options (after correct answer)
+  $optionsContainer.on('click', '.option', function() {
     const $eventTarget = $(event.target);
     const $eventTargetHTML = $(event.target).html();
 
     if ($eventTargetHTML === questionCorrectAnswer) {
       counter++;
       $score.html(counter);
-      
+
       addQuestionToScreen(questionData);
     } else {
       const livesIconsArray = Object.values($('.devicon-jquery-plain'));
@@ -198,6 +204,7 @@ $(function() {
     }
     endGameCheck();
   });
+  
 
   // if correct answer - a message should pop up saying they chose the correct answer and the score adds a point
 
@@ -210,10 +217,10 @@ $(function() {
   // function to check after each guess if the player won the game (i.e. pts = 10) or they lose the game (i.e. lives = 0)
 
   const endGameCheck = () => {
-    if (counter === 10 || lives === 0) {
+    if (counter === 10 || lives < 0) {
       if (counter === 10) {
         console.log('Sweet!  You won the game!  You know your jQuery methods well!');
-      } else if (lives === 0) {
+      } else if (lives < 0) {
         console.log('Sorry!  You lost the game!  Check out the jQuery docs to study up on your methods!');
       }
       // resetGame();
