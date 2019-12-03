@@ -64,10 +64,23 @@ img {
 
 /* ************* DRY styles ************* */
 .question-bubble p,
-.option {
+.option,
+.overlay-text button {
   color: rgb(32, 32, 32);
 }
 
+.option,
+.overlay-text button {
+  font-family: 'Source Code Pro', monospace;
+  background-color: lightsteelblue;
+  border-radius: 5px;
+  width: 175px;
+  text-align: center;
+  margin: 10px;
+  font-size: 1.6rem;
+  cursor: pointer;
+  border: none;
+}
 
 
 /* ************* header styles ************* */
@@ -138,16 +151,8 @@ img {
 }
 
 .option {
-  font-family: 'Source Code Pro', monospace;
-  background-color: lightsteelblue;
-  border-radius: 5px;
-  width: 175px;
-  text-align: center;
-  margin: 10px;
   padding: 30px;
-  font-size: 1.6rem;
-  cursor: pointer;
-  border: none;
+  /* position relative used for absolute positioning in .options-overlay rule */
   position: relative;
 }
 
@@ -171,16 +176,60 @@ img {
   left: 0;
   display: none;
   border-radius: 5px;
-  background-color: rgb(115, 170, 115);
+  transition: left .3s ease-in;
 }
 
 .overlay-correct {
   background-color: rgb(115, 170, 115);
-
 }
 
 .overlay-wrong {
   background-color: rgb(173, 65, 65);;
+}
+
+
+/* ************* win/lose game overlay styles ************* */
+.endgame-overlay {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  /* z-index: 10; */
+  background-color: rgba(211, 211, 211, .5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay-text {
+  max-width: 450px;
+  width: 90%;
+  padding: 0 10px;
+  height: 350px;
+  background-color: black;
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-text h3 {
+  font-size: 2.5rem;
+  margin-top: 40px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.overlay-text p {
+  font-size: 1.8rem;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.overlay-text button {
+  padding: 20px 15px;
+  margin: auto 0 30px;
 }
 
 
