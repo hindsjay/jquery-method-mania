@@ -132,9 +132,13 @@ $(function() {
   ];
 
   // cache jQuery variables
-  $score = $('.score');
-  $questionBubble = $('.question-bubble');
-  $optionsContainer = $('.options-container');
+  const $score = $('.score');
+  const $questionBubble = $('.question-bubble');
+  const $optionsContainer = $('.options-container');
+  const $endgameOverlay = $('.endgame-overlay');
+  const $resetGameButton = $('.overlay-text button');
+  const $livesIcons = $('.devicon-jquery-plain')
+  const livesIconsArray = $.makeArray($livesIcons);
 
 
   // function to get random number
@@ -196,24 +200,29 @@ $(function() {
   // using bubbling to add event listener to dynamically added options (after correct answer)
   $optionsContainer.on('click', '.option', function() {
     const $eventTarget = $(event.target);
-    const $eventTargetHTML = $(event.target).html();
+    const $eventTargetChild = $(event.target).children();
 
-    if ($eventTargetHTML === questionCorrectAnswer) {
+    if ($eventTarget[0].innerText === questionCorrectAnswer) {
       counter++;
       $score.html(counter);
 
       // at correct answer show correct answer button overlay
+      $eventTargetChild.show();
 
       addQuestionToScreen(questionData);
     } else {
-      const livesIconsArray = Object.values($('.devicon-jquery-plain'));
       livesIconsArray[lives].style.visibility = 'hidden';
       lives--;
 
       // at incorrect answer show wrong answer button overlay
+      $eventTargetChild.fadeIn(200, function() {
+        $(this).delay(2000).fadeOut(500);
+      });
 
       // blur out incorrect answer, prevent item from being clicked again, and remove hover effect
-      $eventTarget.css('filter', 'blur(1px)').attr("disabled", true).removeClass('hover-style');
+      setTimeout( () => {
+        $eventTarget.css('filter', 'blur(1px)').attr("disabled", true).removeClass('hover-style').delay(1500);
+      }, 2500);
     }
     endGameCheck();
   });
@@ -230,21 +239,39 @@ $(function() {
   // function to check after each guess if the player won the game (i.e. pts = 10) or they lose the game (i.e. lives = 0)
 
   const endGameCheck = () => {
-    if (counter === 10 || lives < 0) {
-      if (counter === 10) {
-        console.log('Sweet!  You won the game!  You know your jQuery methods well!');
+    if (counter === 1 || lives < 0) {
+      if (counter === 1) {
+        window.scroll(0,0);
+        // $endgameOverlay.css('display', 'flex').fadeIn(300);
+        $endgameOverlay.fadeIn(300).css('display', 'flex');
+
       } else if (lives < 0) {
+        
         console.log('Sorry!  You lost the game!  Check out the jQuery docs to study up on your methods!');
       }
-      // resetGame();
     }
   };
 
 
   // function to reset game after game was won or lost
   const resetGame = () => {
+    counter = 0;
+    lives = 2;
 
+    $livesIcons.each(function() {
+      $(this).css('visibility', 'initial');
+    });
+
+    initializeGame();
+
+    $endgameOverlay.fadeOut(300);
   };
+
+
+  // event listener on play again button to reset the game
+  $resetGameButton.on('click', () => {
+    resetGame();
+  });
 
 
 
