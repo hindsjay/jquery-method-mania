@@ -4,6 +4,8 @@ $(function() {
   //variables
   let counter = 0;
   let lives = 2;
+  // array used in getRandomNumber function
+  let randomNumberArray = [];
   let questionCorrectAnswer;
   let linkToDocs;
 
@@ -136,16 +138,35 @@ $(function() {
   const $score = $('.score');
   const $questionBubble = $('.question-bubble');
   const $optionsContainer = $('.options-container');
-  const $endgameOverlay = $('.endgame-overlay');
+  const $overlay = $('.overlay');
   const $overlayText = $('.overlay-text');
-  const $resetGameButton = $('.overlay-text button');
+  const $overlayButton = $('.overlay-text button');
   const $livesIcons = $('.devicon-jquery-plain')
   const livesIconsArray = $.makeArray($livesIcons);
 
 
-  // function to get random number
+  /*
+  function to get random number
+  added functionality to avoid the same question from showing twice in a game
+  utilized recursion to do this ( I believe it's recursion :) )
+  */
   const getRandomNumber = (num) => {
-    return Math.floor(Math.random() * num);
+    // if we randomly chose all the questions then reset
+    if (randomNumberArray.length === 20) {
+      randomNumberArray = [];
+    }
+    // get random number
+    let randomNumber = Math.floor(Math.random() * num);;
+    // recursive case
+    // if random has already been chosen then run again until we get a new random number
+    if (randomNumberArray.includes(randomNumber)) {
+      return getRandomNumber(num);
+    // base case
+    } else {
+      // push random number to array
+      randomNumberArray.push(randomNumber);
+      return randomNumber;
+    }
   };
 
 
@@ -188,7 +209,7 @@ $(function() {
     // get answerOptions array, append each item to the DOM
     getAnswerOptions().forEach( (option) => {
       if (option === questionCorrectAnswer) {
-        $optionsContainer.append(`<button class="option hover-style">${option}<span class="options-overlay overlay-correct">Awesome! That's right!</span></button>`);
+        $optionsContainer.append(`<button class="option hover-style">${option}</button>`);
       } else {
         $optionsContainer.append(`<button class="option hover-style">${option}<span class="options-overlay overlay-wrong">Oh no! That's not right!</span></button>`);
       }
@@ -204,82 +225,82 @@ $(function() {
   $optionsContainer.on('click', '.option', function() {
     const $eventTarget = $(event.target);
     const $eventTargetChild = $(event.target).children();
-
+    // if the option chosen is the correct answer
     if ($eventTarget[0].innerText === questionCorrectAnswer) {
       counter++;
       $score.html(counter);
 
-      // at correct answer show correct answer button overlay
-      $eventTargetChild.show();
+      $('.overlay-text h3, .overlay-text p, .overlay-text a').remove();
+      // at correct answer show correct answer overlay
+      $overlayText.prepend(`<h3>Congratulations!</h3><p>That's correct!</p><p>To read more on this method, check it out here:</p><a href="${linkToDocs}" target="_blank">${linkToDocs}</a>`);
 
-      addQuestionToScreen(questionData);
+      $overlayButton.html('Next Question');
+      window.scroll(0,0);
+      $overlay.fadeIn(300).css('display', 'flex');
+
     } else {
       livesIconsArray[lives].style.visibility = 'hidden';
       lives--;
-
       // at incorrect answer show wrong answer button overlay
       $eventTargetChild.fadeIn(200, function() {
         $(this).delay(2000).fadeOut(500);
       });
-
       // blur out incorrect answer, prevent item from being clicked again, and remove hover effect
       setTimeout( () => {
         $eventTarget.css('filter', 'blur(1px)').attr("disabled", true).removeClass('hover-style').delay(1500);
       }, 2500);
     }
+    // execute function to check to see if we are at the end of game (i.e. win or lose status)
     endGameCheck();
   });
-  
-
-  // if correct answer - a message should pop up saying they chose the correct answer and the score adds a point
-
-  // if incorrect answer - a message should pop up saying they chose an incorrect answer
-    // on incorrect answer the following should happen:
-    // 1. life is removed
-    // 2. the option they chose is blanked out
 
 
   // function to check after each guess if the player won the game (i.e. pts = 10) or they lose the game (i.e. lives = 0)
-
   const endGameCheck = () => {
-    if (counter === 3 || lives < 0) {
-      if ($overlayText[0].childElementCount > 1) {
-        $('.overlay-text h3, .overlay-text p, .overlay-text a').remove();
-      }
-      if (counter === 3) {
+    if (counter === 10 || lives < 0) {
+      $('.overlay-text h3, .overlay-text p, .overlay-text a').remove();
+      $overlayButton.html('Play Again?');
+
+      if (counter === 10) {
 
         $overlayText.prepend(`<h3>Congratulations!</h3><p>You Won the game!</p><p>You sure know your jQuery methods well!</p>`);
 
       } else if (lives < 0) {
         $overlayText.prepend(`<h3>Sorry!</h3><p>You Lost the game!</p><p>To do further reading on this method, check it out here:</p><a href="${linkToDocs}" target="_blank">${linkToDocs}</a>`);
-        console.log('Sorry!  You lost the game!  Check out the jQuery docs to study up on your methods!');
       }
       window.scroll(0,0);
-      $endgameOverlay.fadeIn(300).css('display', 'flex');
+      $overlay.fadeIn(300).css('display', 'flex');
     }
   };
 
 
   // function to reset game after game was won or lost
   const resetGame = () => {
+    // reset counter and lives variables back to initial start values
     counter = 0;
     lives = 2;
-
+    // 
     $livesIcons.each(function() {
       $(this).css('visibility', 'initial');
     });
 
     initializeGame();
 
-    $endgameOverlay.fadeOut(300);
+    $overlay.fadeOut(300);
   };
 
 
   // event listener on play again button to reset the game
-  $resetGameButton.on('click', () => {
-    resetGame();
+  $overlayButton.on('click', (event) => {
+    const $eventTarget = $(event.target);
+    if ($eventTarget[0].innerHTML === 'Next Question') {
+      // get new question added to the screen
+      addQuestionToScreen(questionData);
+
+      $overlay.fadeOut(300);
+    } else {
+      resetGame();
+    }
   });
-
-
 
 }); // end of document ready
