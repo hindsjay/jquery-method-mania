@@ -5,6 +5,7 @@ $(function() {
   let counter = 0;
   let lives = 2;
   let questionCorrectAnswer;
+  let linkToDocs;
 
   // question/answer data structure --> array of objects that hold question/answer data
   const questionData = [
@@ -136,6 +137,7 @@ $(function() {
   const $questionBubble = $('.question-bubble');
   const $optionsContainer = $('.options-container');
   const $endgameOverlay = $('.endgame-overlay');
+  const $overlayText = $('.overlay-text');
   const $resetGameButton = $('.overlay-text button');
   const $livesIcons = $('.devicon-jquery-plain')
   const livesIconsArray = $.makeArray($livesIcons);
@@ -181,6 +183,8 @@ $(function() {
     };
     // store correct answer
     questionCorrectAnswer = array[randomNumber].answer;
+    // store link to jQuery docs for specific question
+    linkToDocs = array[randomNumber].link;
     // get answerOptions array, append each item to the DOM
     getAnswerOptions().forEach( (option) => {
       if (option === questionCorrectAnswer) {
@@ -188,7 +192,6 @@ $(function() {
       } else {
         $optionsContainer.append(`<button class="option hover-style">${option}<span class="options-overlay overlay-wrong">Oh no! That's not right!</span></button>`);
       }
-      // $optionsContainer.append(`<button class="option hover-style">${option}</button>`);
     });
   }
 
@@ -239,16 +242,20 @@ $(function() {
   // function to check after each guess if the player won the game (i.e. pts = 10) or they lose the game (i.e. lives = 0)
 
   const endGameCheck = () => {
-    if (counter === 1 || lives < 0) {
-      if (counter === 1) {
-        window.scroll(0,0);
-        // $endgameOverlay.css('display', 'flex').fadeIn(300);
-        $endgameOverlay.fadeIn(300).css('display', 'flex');
+    if (counter === 3 || lives < 0) {
+      if ($overlayText[0].childElementCount > 1) {
+        $('.overlay-text h3, .overlay-text p, .overlay-text a').remove();
+      }
+      if (counter === 3) {
+
+        $overlayText.prepend(`<h3>Congratulations!</h3><p>You Won the game!</p><p>You sure know your jQuery methods well!</p>`);
 
       } else if (lives < 0) {
-        
+        $overlayText.prepend(`<h3>Sorry!</h3><p>You Lost the game!</p><p>To do further reading on this method, check it out here:</p><a href="${linkToDocs}" target="_blank">${linkToDocs}</a>`);
         console.log('Sorry!  You lost the game!  Check out the jQuery docs to study up on your methods!');
       }
+      window.scroll(0,0);
+      $endgameOverlay.fadeIn(300).css('display', 'flex');
     }
   };
 
