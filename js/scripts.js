@@ -198,7 +198,7 @@ $(function() {
     };
     //adds random question to DOM
     $questionBubble.append(`<p>${getRandomQuestion()}</p>`);
-    // funtion to get answer options for the retrieved question from data structure --> returns an array
+    // function to get answer options for the retrieved question from data structure --> returns an array
     const getAnswerOptions = () => {
       return array[randomNumber].options;
     };
@@ -232,7 +232,7 @@ $(function() {
       // remove elements in the overlay-text container if there are any
       $('.overlay-text h3, .overlay-text p, .overlay-text a').remove();
       // add elements to overlay-text container to show message when overlay is shown at correct answer
-      $overlayText.prepend(`<h3>Congratulations!</h3><p>That's correct!</p><p>To read more on this method, check it out here:</p><a href="${linkToDocs}" target="_blank">${linkToDocs}</a>`);
+      $overlayText.prepend(`<h3>Awesome!!</h3><p>That's correct!</p><p>To read more on this method, check it out here:</p><a href="${linkToDocs}" target="_blank">${linkToDocs}</a>`);
       // change text inside button
       $overlayButton.html('Next Question');
       // scroll to top of page where overlay text is positioned then show overlay
@@ -296,7 +296,8 @@ $(function() {
     const $eventTarget = $(event.target);
     // if overlay is shown after correct question then add new question to screen after click
     if ($eventTarget[0].innerHTML === 'Next Question') {
-      // get new question added to the screen
+      // get new question added to the screen and scroll down to question
+      window.scroll(0,500);
       addQuestionToScreen(questionData);
       $overlay.fadeOut(300);
     // if the innerHTML of the button is not 'Next Question' then it would be 'Play Again' and if user clicks button we would want to restart game  
