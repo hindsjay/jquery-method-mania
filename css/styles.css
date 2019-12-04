@@ -17,8 +17,6 @@ html {
 }
 
 body {
-  /* font-size: 2rem; */
-  /* font-family: 'Lato', sans-serif; */
   font-family: 'Source Code Pro', monospace;
   color: rgb(230, 227, 227);
 }
@@ -54,8 +52,11 @@ img {
   display: block;
 }
 
+main {
+  margin-bottom: 70px;
+}
+
 .wrapper {
-  /* max-width: 1120px; */
   max-width: 600px;
   width: 90%;
   margin: 0 auto;
@@ -86,12 +87,10 @@ img {
 /* ************* header styles ************* */
 .header-container {
   text-align: center;
-  /* font-family: 'Kaushan Script', cursive; */
   letter-spacing: 2px;
 }
 
 .header-container h1 {
-  /* font-family: 'Bungee Shade', cursive; */
   font-family: 'Monoton', cursive;
   font-size: 3.8rem;
   text-transform: uppercase;
@@ -100,14 +99,21 @@ img {
 }
 
 .header-container h2 {
-  /* font-family: 'Source Code Pro', monospace; */
-  /* font-family: 'Roboto Mono', monospace; */
-  /* text-transform: uppercase; */
   font-size: 1.8rem;
 }
 
 
 /* ************* main styles ************* */
+.rules {
+  font-size: 1.5rem;
+  max-width: 530px;
+  margin: 30px auto 0;
+}
+
+.rules p {
+  margin: 5px 0;
+}
+
 .scoreboard-container {
   margin: 30px 0 0 auto;
   text-align: right;
@@ -243,9 +249,13 @@ img {
 }
 
 
+/* ************* footer styles ************* */
+.credits {
+  font-size: 1.4rem;
+  text-align: center;
+}
 
-/* ************* media queries ************* */
-
-@media (min-width: 600px) {
-
+.credits a {
+  text-decoration: underline;
+  color: rgb(135, 206, 250);
 }
