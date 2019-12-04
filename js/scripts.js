@@ -147,7 +147,7 @@ $(function() {
 
   /*
   function to get random number
-  added functionality to avoid the same question from showing twice in a game
+  added logic to avoid the same question from showing twice in a game
   utilized recursion to do this ( I believe it's recursion :) )
   */
   const getRandomNumber = (num) => {
@@ -158,12 +158,12 @@ $(function() {
     // get random number
     let randomNumber = Math.floor(Math.random() * num);;
     // recursive case
-    // if random has already been chosen then run again until we get a new random number
+    // if random number has already been used then run again until we get a non-used random number
     if (randomNumberArray.includes(randomNumber)) {
       return getRandomNumber(num);
     // base case
     } else {
-      // push random number to array
+      // add/store random number to array
       randomNumberArray.push(randomNumber);
       return randomNumber;
     }
@@ -198,7 +198,7 @@ $(function() {
     };
     //adds random question to DOM
     $questionBubble.append(`<p>${getRandomQuestion()}</p>`);
-    // get corresponding answer options array from data structure --> returns an array
+    // funtion to get answer options for the retrieved question from data structure --> returns an array
     const getAnswerOptions = () => {
       return array[randomNumber].options;
     };
@@ -220,8 +220,8 @@ $(function() {
   initializeGame();
 
 
-  // when one of the options is chosen, it is the correct answer or an incorrect answer?
-  // using bubbling to add event listener to dynamically added options (after correct answer)
+  // when one of the options is chosen, is it the correct answer or an incorrect answer?
+  // using bubbling to add event listener to dynamically added options
   $optionsContainer.on('click', '.option', function() {
     const $eventTarget = $(event.target);
     const $eventTargetChild = $(event.target).children();
@@ -229,16 +229,18 @@ $(function() {
     if ($eventTarget[0].innerText === questionCorrectAnswer) {
       counter++;
       $score.html(counter);
-
+      // remove elements in the overlay-text container if there are any
       $('.overlay-text h3, .overlay-text p, .overlay-text a').remove();
-      // at correct answer show correct answer overlay
+      // add elements to overlay-text container to show message when overlay is shown at correct answer
       $overlayText.prepend(`<h3>Congratulations!</h3><p>That's correct!</p><p>To read more on this method, check it out here:</p><a href="${linkToDocs}" target="_blank">${linkToDocs}</a>`);
-
+      // change text inside button
       $overlayButton.html('Next Question');
+      // scroll to top of page where overlay text is positioned then show overlay
       window.scroll(0,0);
+      // show correct answer overlay
       $overlay.fadeIn(300).css('display', 'flex');
-
     } else {
+      // hide lives icon at incorrect guess
       livesIconsArray[lives].style.visibility = 'hidden';
       lives--;
       // at incorrect answer show wrong answer button overlay
@@ -257,17 +259,17 @@ $(function() {
 
   // function to check after each guess if the player won the game (i.e. pts = 10) or they lose the game (i.e. lives = 0)
   const endGameCheck = () => {
-    if (counter === 10 || lives < 0) {
+    if (counter === 5 || lives < 0) {
+      // remove elements in the overlay-text container making room for new elements to be dynamically added
       $('.overlay-text h3, .overlay-text p, .overlay-text a').remove();
       $overlayButton.html('Play Again?');
-
-      if (counter === 10) {
-
+      // win game when counter reached five
+      if (counter === 5) {
         $overlayText.prepend(`<h3>Congratulations!</h3><p>You Won the game!</p><p>You sure know your jQuery methods well!</p>`);
-
       } else if (lives < 0) {
         $overlayText.prepend(`<h3>Sorry!</h3><p>You Lost the game!</p><p>To do further reading on this method, check it out here:</p><a href="${linkToDocs}" target="_blank">${linkToDocs}</a>`);
       }
+
       window.scroll(0,0);
       $overlay.fadeIn(300).css('display', 'flex');
     }
@@ -279,25 +281,25 @@ $(function() {
     // reset counter and lives variables back to initial start values
     counter = 0;
     lives = 2;
-    // 
+    // return lives icons to start game state
     $livesIcons.each(function() {
       $(this).css('visibility', 'initial');
     });
 
     initializeGame();
-
     $overlay.fadeOut(300);
   };
 
 
-  // event listener on play again button to reset the game
+  // event listener on button in overlay to either get new question or reset game
   $overlayButton.on('click', (event) => {
     const $eventTarget = $(event.target);
+    // if overlay is shown after correct question then add new question to screen after click
     if ($eventTarget[0].innerHTML === 'Next Question') {
       // get new question added to the screen
       addQuestionToScreen(questionData);
-
       $overlay.fadeOut(300);
+    // if the innerHTML of the button is not 'Next Question' then it would be 'Play Again' and if user clicks button we would want to restart game  
     } else {
       resetGame();
     }
