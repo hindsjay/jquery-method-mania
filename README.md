@@ -1,4 +1,4 @@
-jQuery Method Mania!
+# jQuery Method Mania!
 
 jQuery Method Mania is a quiz game I built from scratch while I was in the Juno College of Technology JavaScript class (Dec 2019).  Project was built to demonstrate use and knowledge of JavaScript and jQuery.
 
