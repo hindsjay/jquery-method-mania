@@ -148,9 +148,9 @@ app.livesIconsArray = $.makeArray(app.$livesIcons);
 
 
 /*
-function to get random number
-added logic to avoid the same question from showing twice in a game
-utilized recursion to do this ( I believe it's recursion :) )
+function to get random number.
+added logic to avoid the same question from showing twice in a game.
+utilized recursion to do this.
 */
 app.getRandomNumber = (num) => {
   // if we randomly chose all the questions then reset
